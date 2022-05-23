@@ -62,16 +62,15 @@ class AuthController extends Controller
         ]);
 
         try {
-            User::create([
+            $user = User::create([
                 'role'=>'user',
                 'name'=>$request->input('name'),
                 'email'=>$request->input('email'),
                 'password'=>Hash::make($request->input('password')),
             ]);
-            Toastr::success('Thank you for registration');
-            Session::flash('type','success');
-            Session::flash('message','Registration Successfull !!!');
-            return redirect()->route('login');
+            Auth::login($user);
+            Toastr::success('Thank you for Registration !!');
+            return redirect()->route('user.profile');
         } catch (Exception $error) {
             Toastr::error('Something went wrong!!');
             Session::flash('type','error');
