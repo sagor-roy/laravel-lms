@@ -18524,7 +18524,7 @@ input:focus {
 }
 
 .sidebar .nav .nav-item.active {
-  background: inherit;
+  background-color: #f2f2f2;
 }
 
 .sidebar .nav .nav-item.active > .nav-link {

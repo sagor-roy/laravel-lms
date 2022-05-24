@@ -65,6 +65,7 @@
   <!-- endinject -->
   <!-- Custom js for this page-->
   <script src="{{asset('asset/backend/js/dashboard.js')}}"></script>
+  <script src="{{asset('asset/backend/js/data-table.js')}}"></script>
   
   <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
 

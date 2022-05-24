@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\User\UserController;
@@ -30,5 +31,10 @@ Route::get('logout',[AuthController::class,'logout'])->name('logout');
 Route::prefix('admin')->middleware('admin')->name('admin.')->group(function(){
     // dashboard
     Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
+
+    // category
+    Route::prefix('category')->name('cate.')->group(function(){
+        Route::get('/',[CategoryController::class,'index'])->name('index');
+    });
 });
 

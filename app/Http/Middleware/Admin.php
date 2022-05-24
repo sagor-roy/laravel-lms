@@ -22,9 +22,9 @@ class Admin
            if (Auth::user()->role == 'super') {
                 return $next($request);
            }
-           Toastr::error('You don\'t have permission');
-            return redirect()->back();
         }
+        Toastr::error('You don\'t have permission');
+        return redirect()->back();
         
     }
 }
