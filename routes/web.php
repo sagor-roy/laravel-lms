@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\CourseController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\User\UserController;
@@ -35,6 +36,34 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function(){
     // category
     Route::prefix('category')->name('cate.')->group(function(){
         Route::get('/',[CategoryController::class,'index'])->name('index');
+        Route::get('show',[CategoryController::class,'show'])->name('show');
+        Route::post('multi/delete',[CategoryController::class,'multiDestroy'])->name('multi-delete');
+        Route::post('store',[CategoryController::class,'store'])->name('store');
+        Route::post('update/{id}',[CategoryController::class,'update'])->name('update');
+        Route::post('status/update/{id}',[CategoryController::class,'status'])->name('status.update');
+        Route::get('destroy/{id}',[CategoryController::class,'destroy'])->name('destroy');
+    });
+
+    // course
+    Route::prefix('course')->name('course.')->group(function(){
+        Route::get('/',[CourseController::class,'index'])->name('index');
+        Route::get('duplicate/{id}',[CourseController::class,'duplicate'])->name('duplicate');
+        Route::get('create',[CourseController::class,'create'])->name('create');
+        Route::post('store',[CourseController::class,'store'])->name('store');
+        Route::get('edit/{id}',[CourseController::class,'edit'])->name('edit');
+        Route::post('update/{id}',[CourseController::class,'update'])->name('update');
+        Route::post('status/update/{id}',[CourseController::class,'status'])->name('status.update');
+        Route::get('destroy/{id}',[CourseController::class,'destroy'])->name('destroy');
+
+        // tab active
+        Route::post('active',[CourseController::class,'active'])->name('active');
+
+        // chapter
+        Route::post('chpater/store/{id}',[CourseController::class,'chapter'])->name('chapter.store');
+        Route::post('chpater/status/{course}/{chapter}',[CourseController::class,'chapterStatus'])->name('chapter.status');
+        Route::post('chpater/update/{course}/{chapter}',[CourseController::class,'chapterUpdate'])->name('chapter.update');
+        Route::get('chpater/delete/{course}/{chapter}',[CourseController::class,'chapterDelete'])->name('chapter.destroy');
     });
 });
+
 

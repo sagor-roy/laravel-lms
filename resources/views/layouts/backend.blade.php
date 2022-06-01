@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="{{asset('asset/backend/vendors/iconfonts/font-awesome/css/all.min.css')}}">
   <link rel="stylesheet" href="{{asset('asset/backend/vendors/css/vendor.bundle.base.css')}}">
   <link rel="stylesheet" href="{{asset('asset/backend/vendors/css/vendor.bundle.addons.css')}}">
+  <link rel="stylesheet" href="{{asset('asset/backend/vendors/summernote/dist/summernote-bs4.css')}}">
+
   <!-- endinject -->
   <!-- plugin css for this page -->
   <!-- End plugin css for this page -->
@@ -60,19 +62,37 @@
   <script src="{{asset('asset/backend/js/off-canvas.js')}}"></script>
   <script src="{{asset('asset/backend/js/hoverable-collapse.js')}}"></script>
   <script src="{{asset('asset/backend/js/misc.js')}}"></script>
-  <script src="{{asset('asset/backend/js/settings.js')}}"></script>
-  <script src="{{asset('asset/backend/js/todolist.js')}}"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
   <script src="{{asset('asset/backend/js/dashboard.js')}}"></script>
   <script src="{{asset('asset/backend/js/data-table.js')}}"></script>
+  <script src="{{asset('asset/backend/vendors/summernote/dist/summernote-bs4.min.js')}}"></script>
   
   <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="{{asset('asset/backend/js/form-addons.js')}}"></script>
+
+  <script src="{{asset('asset/backend/js/editorDemo.js')}}"></script>
+
 
   {!! Toastr::message() !!}
   <!-- End custom js for this page-->
+
+  @yield('script')
+
+<script>
+  $(function(){
+    $('#selectAll').on('change',function(e){
+      let check = $(this).prop('checked') == true ? 1:0;
+      if (check == 1) {
+        $("input[name='check[]']").prop('checked',true);
+      }else{
+        $("input[name='check[]']").prop('checked',false);
+      }
+    })
+  })
+
+</script>
+
+
 </body>
-
-
-<!-- Mirrored from www.urbanui.com/melody/template/pages/layout/sidebar-fixed.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Sep 2018 06:05:56 GMT -->
 </html>

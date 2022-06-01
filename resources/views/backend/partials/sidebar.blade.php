@@ -33,5 +33,11 @@
           <span class="menu-title">Category</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{route('admin.course.index')}}">
+          <i class="fa fa-puzzle-piece menu-icon"></i>
+          <span class="menu-title">Course</span>
+        </a>
+      </li>
     </ul>
   </nav>
