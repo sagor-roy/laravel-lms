@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="{{asset('asset/frontend/css/swiper-bundle.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('asset/frontend/dist/css/dropify.css')}}" />
     <link rel="stylesheet" href="{{asset('asset/frontend/css/style.css')}}">
     <style>
         .toast {
@@ -29,11 +30,17 @@
     <script src="{{asset('asset/frontend/js/swiper-bundle.min.js')}}"></script>
 
     <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="{{asset('asset/frontend/dist/js/dropify.js')}}"></script>
 
   {!! Toastr::message() !!}
 
+  @yield('script')
+
     <!-- Initialize Swiper -->
     <script>
+        
+
+        // slider
         var swiper = new Swiper(".slider", {
             loop: true,
             pagination: {

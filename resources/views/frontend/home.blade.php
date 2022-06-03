@@ -19,6 +19,11 @@
     </div>
 </section>
 
+@if (Auth::check())
+@php
+    $courses = \session()->has('recent') ? \session()->get('recent') : [];
+@endphp
+@if ($totalView > 0)
 <section class="mt-4">
     <div class="container">
         <div class="title mb-2">
@@ -26,10 +31,11 @@
         </div>
         <div class="swiper recent">
             <div class="swiper-wrapper">
+                @foreach ($courses as $item)
                 <div class="swiper-slide course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
+                    <img src="{{asset($item['img'])}}" alt="">
                     <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
+                        <h6>{{str_title($item['title'])}}</h6>
                         <div class="sort">
                             <p>by Hapijul Islam</p>
                             <i class="fas fa-star"></i>
@@ -39,49 +45,37 @@
                             <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
+                    @if ($item['type'] == 'paid')
+                    <h6 class="text-end me-2">&#2547; 
+                        @if ($item['discount'] == null)
+                            {{number_format($item['price'])}}
+                        @else
+                            @php
+                                $price = $item['price'] * $item['discount'] / 100;
+                                $final = $item['price'] - $price;
+                            @endphp
+                            {{number_format($final)}}
+                            <del> &#2547;{{number_format($item['price'])}}</del>
+                        @endif 
+                    </h6>
+                    @else
+                        <div class="badge bg-danger float-end">Free</div>
+                    @endif
+                    <a href="{{route('single.course',[$item['id'], $item['slug']])}}" class="link"></a>
                 </div>
-                <div class="swiper-slide course">
-                    <img src="{{asset('asset/frontend/img/course/2.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-                <div class="swiper-slide course">
-                    <img src="{{asset('asset/frontend/img/course/3.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
+                @endforeach
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
         </div>
     </div>
 </section>
+@endif
+@endif
 
-<section class="mt-3">
+
+
+{{-- <section class="mt-3">
     <div class="container">
         <div class="title mb-2">
             <h5 class="fw-bold border-bottom border-2 border-primary d-inline">My Purchase Courses :</h5>
@@ -141,7 +135,7 @@
             <div class="swiper-button-prev"></div>
         </div>
     </div>
-</section>
+</section> --}}
 
 <section class="mt-3">
     <div class="container">
@@ -149,137 +143,20 @@
             <h5 class="fw-bold border-bottom border-2 border-primary d-inline">Recently Added Courses :</h5>
         </div>
         <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab"
-                    aria-controls="home" aria-selected="true">Web Design</a>
+            <li class="nav-item mx-1" role="presentation">
+                <a class="nav-link text-dark active" onclick="reloadFunc()" id="home-tab" data-bs-toggle="tab" href="#home">All Courses</a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"
-                    aria-controls="profile" aria-selected="false">PHP</a>
+            @foreach ($cate as $item)
+            <li class="nav-item mx-1" role="presentation">
+                <a class="nav-link text-dark" onclick="tabFunc({{$item->id}})" id="home-tab" data-bs-toggle="tab" href="#home">{{$item->name}}</a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab"
-                    aria-controls="contact" aria-selected="false">Laravel</a>
-            </li>
+            @endforeach
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="card course">
-                            <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                            <div class="card-body">
-                                <h6>PHP Laravel Advanced Course</h6>
-                                <div class="sort">
-                                    <p>by Hapijul Islam</p>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                            <a href="#" class="link"></a>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card course">
-                            <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                            <div class="card-body">
-                                <h6>PHP Laravel Advanced Course</h6>
-                                <div class="sort">
-                                    <p>by Hapijul Islam</p>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                            <a href="#" class="link"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="card course">
-                            <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                            <div class="card-body">
-                                <h6>PHP Laravel Advanced Course</h6>
-                                <div class="sort">
-                                    <p>by Hapijul Islam</p>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                            <a href="#" class="link"></a>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card course">
-                            <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                            <div class="card-body">
-                                <h6>PHP Laravel Advanced Course</h6>
-                                <div class="sort">
-                                    <p>by Hapijul Islam</p>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                            <a href="#" class="link"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="card course">
-                            <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                            <div class="card-body">
-                                <h6>PHP Laravel Advanced Course</h6>
-                                <div class="sort">
-                                    <p>by Hapijul Islam</p>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                            <a href="#" class="link"></a>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card course">
-                            <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                            <div class="card-body">
-                                <h6>PHP Laravel Advanced Course</h6>
-                                <div class="sort">
-                                    <p>by Hapijul Islam</p>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                            <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                            <a href="#" class="link"></a>
-                        </div>
+            <div class="tab-pane fade show active" id="home" aria-labelledby="home-tab">
+                <div id="coursess" class="row">
+                    <div class="loader fa-5x text-center my-5">
+                        <i class="fas fa-spinner fa-spin"></i>
                     </div>
                 </div>
             </div>
@@ -308,225 +185,43 @@
 
 <section>
     <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
+        <div id="features" class="row">
+            <div class="loader fa-5x text-center my-5">
+                <i class="fas fa-spinner fa-spin"></i>
             </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-            </div>
-
         </div>
     </div>
 </section>
+
+@section('script')
+<script>
+        function reload() {
+            $.ajax({
+            url:"{{route('tab.course')}}",
+            type:'get',
+            success:(result)=>{
+                $('#coursess').html(result);
+                $('#features').html(result);
+            }
+        })
+        }
+    reload()
+
+    function reloadFunc() {
+        reload()
+    }
+    
+    function tabFunc(id) {
+        $.ajax({
+            url:"/cate-course/"+id,
+            type:'get',
+            success:(result)=>{
+                $('#coursess').html(result)
+            }
+        })
+    }
+</script>
+@endsection
+
+
 @endsection

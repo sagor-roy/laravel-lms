@@ -14,4 +14,8 @@ class Categories extends Model
         'slug',
         'status',
     ];
+
+    public function courses() {
+        return $this->hasMany(Course::class,'cate_id')->where('status','1');
+    }
 }

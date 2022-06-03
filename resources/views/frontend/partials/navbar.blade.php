@@ -15,17 +15,25 @@
                 </div>
                 <div class="col-md-3">
                     <div class="d-flex justify-content-between align-items-center">
+                        @auth
                         <div class="list">
                             <a href=""><i class="fa-solid fa-bell"></i></a>
                             <span>0</span>
                         </div>
+                        @endauth
                         <div class="list">
-                            <a href=""><i class="fa-solid fa-heart"></i></a>
-                            <span>0</span>
+                            <a href="{{route('user.wishlist')}}"><i class="fa-solid fa-heart"></i></a>
+                            <span>
+                                @if (Auth::check())
+                                {{\App\Models\Wishlist::where('user_id',Auth::user()->id)->count()}}
+                                @else
+                                    0
+                                @endif
+                            </span>
                         </div>
                         <div class="list">
-                            <a href=""><i class="fa-solid fa-cart-shopping"></i></a>
-                            <span>0</span>
+                            <a href="{{route('cart')}}"><i class="fa-solid fa-cart-shopping"></i></a>
+                            <span>{{count(Session::has('cart') ? Session::get('cart') : [])}}</span>
                         </div>
                         @guest
                         <a href="{{route('login')}}" class="btn-style red-btn border-0">Login</a>
@@ -35,7 +43,9 @@
                         <div class="dropdown">
                             <button class="btn-style red-btn border-0" type="button" id="drp"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user"></i> {{Auth::user()->name}}
+                                {{-- <i class="fa-solid fa-user"></i> --}}
+                                <img width="25" src="{{Avatar::create(Auth::user()->name)->toBase64()}}" alt="avatar">
+                                {{-- {{str_limit(Auth::user()->name)}} --}}
                             </button>
                             <ul class="dropdown-menu mt-2" aria-labelledby="drp">
                                 @if (Auth::user()->role == 'super')

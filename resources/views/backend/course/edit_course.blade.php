@@ -186,7 +186,7 @@ a.active {background-color: #ddd;}
                       <div class="row">
                         <div class="col-12">
                           <div class="table-responsive">
-                            <table id="order-listing" class="table">
+                            <table class="order-listing table">
                               <thead>
                                 <tr>
                                     <th>
@@ -282,7 +282,132 @@ a.active {background-color: #ddd;}
                   </div>
                 </div>
                 <div class="tab-pane fade @if(Session::get('status')=='classes') active show @endif" id="classes-2" role="tabpanel" aria-labelledby="classes-tab-vertical">
-                  <a href="">Classes</a>
+                  <div class="card border-0">
+                    <div class="card-body p-0">
+                      <h4 class="card-title text-right">
+                        <a href="#class" data-toggle="modal" class="btn btn-primary"><i class="fas fa-plus"></i> New Classes</a>
+                      </h4>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="table-responsive">
+                            <table class="order-listing table">
+                              <thead>
+                                <tr>
+                                    <th>
+                                      <input type="checkbox" id="selectAll">
+                                    </th>
+                                    <th>Chapter</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @foreach ($class as $item)
+                                <tr>
+                                  <td>
+                                    <input type="checkbox" name="check[]">
+                                  </td>
+                                  <td>{{$item->chapter->name}}</td>
+                                  <td>{{$item->title}}</td>
+                                  <td>
+                                    <form action="{{route('admin.course.class.status',$item->id)}}" method="POST">
+                                      @csrf
+                                    <label class="switch">
+                                      <input type="checkbox" onchange="this.form.submit()" name="status" value="1" {{$item->status == 1 ? 'checked':''}}>
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </form>
+                                  </td>
+                                  <td>
+                                    <a title="Edit" data-toggle="modal" href="#class{{$item->id}}"><i class="fas fa-pen"></i></a>
+                                    <a title="Delete" data-toggle="modal" href="#delete{{$item->id}}" class="text-danger ml-2"><i class="fas fa-trash-alt"></i></a>
+                                  </td>
+                                </tr>
+                                <!-- edit -->
+                                <div class="modal fade" id="class{{$item->id}}" tabindex="-1">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title">Class Edit</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                          <span aria-hidden="true">×</span>
+                                        </button>
+                                      </div>
+                                      <form action="{{route('admin.course.class.update',$item->id)}}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="course" value="{{$course->id}}">
+                                      <div class="modal-body">
+                                        <div class="form-group">
+                                          <label for="">Chapter Name :</label>
+                                          <select name="chapter" class="form-control">
+                                            <option value="">Select your chapter</option>
+                                            @foreach ($chapter as $chap)
+                                            <option value="{{$chap->id}}" {{$item->chapter_id == $chap->id ? 'selected':''}}>{{$chap->name}}</option>
+                                            @endforeach
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="">Title</label>
+                                          <input type="text" name="title" value="{{$item->title}}" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="">Detail</label>
+                                          <textarea name="detail" rows="4" class="form-control">{{$item->detail}}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="">Video Link</label>
+                                          <input type="text" value="{{$item->link}}" name="link" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="">Video Duration</label>
+                                          <input type="text" value="{{$item->duration}}" name="duration" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="">Status :</label> <br>
+                                          <label class="switch">
+                                            <input type="checkbox" name="status" value="1" {{$item->status == 1 ? 'checked':''}}>
+                                            <span class="slider round"></span>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                      </div>
+                                    </form>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- delete -->
+                                <div class="modal fade" id="delete{{$item->id}}" tabindex="-1">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title">Category Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                          <span aria-hidden="true">×</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <h4>Are you sure to Delete?</h4>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                                        <a href="{{route('admin.course.class.destroy', $item->id)}}" class="btn btn-danger">Yes, Confirm</a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                @endforeach
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -309,6 +434,61 @@ a.active {background-color: #ddd;}
         <div class="form-group">
           <label for="">Name :</label>
           <input type="text" name="name" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="">Status :</label> <br>
+          <label class="switch">
+            <input type="checkbox" name="status" value="1">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- create -->
+<div class="modal fade" id="class" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Class Create</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form action="{{route('admin.course.class.store',$course->id)}}" method="POST">
+        @csrf
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="">Chapter Name :</label>
+          <select name="chapter" class="form-control">
+            <option value="">Select your chapter</option>
+            @foreach ($chapter as $item)
+            <option value="{{$item->id}}">{{$item->name}}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="">Title</label>
+          <input type="text" name="title" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="">Detail</label>
+          <textarea name="detail"  rows="4" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="">Video Link</label>
+          <input type="text" name="link" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="">Video Duration</label>
+          <input type="text" name="duration" class="form-control">
         </div>
         <div class="form-group">
           <label for="">Status :</label> <br>

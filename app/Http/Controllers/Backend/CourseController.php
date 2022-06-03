@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use App\Models\Chapter;
+use App\Models\Classes;
 use App\Models\Course;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
@@ -121,12 +122,14 @@ class CourseController extends Controller
         }
     }
 
+
     public function edit($id)
     {
         $course = Course::find($id);
         $cate = Categories::get();
-        $chapter = Chapter::where('course_id',$id)->latest()->get();
-        return view('backend.course.edit_course',compact('cate','course','chapter'));
+        $chapter = Chapter::where('course_id',$id)->get();
+        $class = Classes::where('course_id',$id)->with('chapter')->get();
+        return view('backend.course.edit_course',compact('cate','course','chapter','class'));
     }
 
     public function update(Request $request, $id)
@@ -304,8 +307,120 @@ class CourseController extends Controller
     public function chapterDelete($course, $chapter)
     {
         try {
-            Chapter::where('course_id',$course)->where('id',$chapter)->delete();
-            Toastr::success('Chapter Delete Successful');
+            if (Classes::where('chapter_id',$chapter)->first()) {
+                Toastr::error('Chapter already used','Sorry!!!');
+                return redirect()->back();
+            } else {
+                Chapter::where('course_id',$course)->where('id',$chapter)->delete();
+                Toastr::success('Chapter Delete Successful');
+                return redirect()->back();
+            }
+        } catch (Exception $error) {
+            Toastr::error($error->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function classes(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'chapter' => 'required',
+            'title' => 'required',
+            'detail' => 'required',
+            'link' => 'required',
+            'duration' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->back()->withErrors(Toastr::error($validator->errors()->all()[0]))->withInput();
+        }
+
+        try {
+            if ($request->input('status') == 1) {
+                $status = '1';
+            }else{
+                $status = '0';
+            }
+            Classes::create([
+                'course_id' => $id,
+                'title' => $request->input('title'),
+                'chapter_id' => $request->input('chapter'),
+                'detail' => $request->input('detail'),
+                'link' => $request->input('link'),
+                'duration' => $request->input('duration'),
+                'status' => $status
+            ]);
+            Toastr::success('Class Created Successful');
+            return redirect()->back();
+        } catch (Exception $error) {
+            Toastr::error($error->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    
+    public function classStatus(Request $request, $id)
+    {
+        try {
+            if ($request->input('status') == 1) {
+                $status = '1';
+            }else{
+                $status = '0';
+            }
+            Classes::find($id)->update([
+                'status' => $status
+            ]);
+            Toastr::success('Status Update Successful');
+            return redirect()->back();
+        } catch (Exception $error) {
+            Toastr::error($error->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function classUpdate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'chapter' => 'required',
+            'title' => 'required',
+            'detail' => 'required',
+            'link' => 'required',
+            'duration' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->back()->withErrors(Toastr::error($validator->errors()->all()[0]))->withInput();
+        }
+
+        try {
+            if ($request->input('status') == 1) {
+                $status = '1';
+            }else{
+                $status = '0';
+            }
+            Classes::find($id)->update([
+                'course_id' => $request->input('course'),
+                'title' => $request->input('title'),
+                'chapter_id' => $request->input('chapter'),
+                'detail' => $request->input('detail'),
+                'link' => $request->input('link'),
+                'duration' => $request->input('duration'),
+                'status' => $status
+            ]);
+            Toastr::success('Class Created Successful');
+            return redirect()->back();
+        } catch (Exception $error) {
+            Toastr::error($error->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    
+    public function classDelete($id)
+    {
+        try {
+            Classes::find($id)->delete();
+            Toastr::success('Classes Delete Successful');
             return redirect()->back();
         } catch (Exception $error) {
             Toastr::error($error->getMessage());

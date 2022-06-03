@@ -16,7 +16,6 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            Toastr::error('You don\'t have permission');
             return route('login');
         }
     }

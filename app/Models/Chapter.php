@@ -15,4 +15,12 @@ class Chapter extends Model
         'slug',
         'status',
     ];
+
+    public function course() {
+        return $this->hasMany(Chapter::class);
+    }
+
+    public function chapters() {
+        return $this->hasMany(Classes::class,'chapter_id');
+    }
 }

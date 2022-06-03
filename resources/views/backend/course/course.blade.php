@@ -42,7 +42,12 @@
                     <input type="checkbox" name="check[]" value="{{$item->id}}">
                   </td>
                   <td>
-                    <img src="{{asset($item->img)}}" width="150" alt="">
+                    <img src="
+                    @if (file_exists(public_path($item->img)))
+                      {{asset($item->img)}}
+                      @else
+                      https://pharem-project.eu/wp-content/themes/consultix/images/no-image-found-360x250.png
+                  @endif" width="150" alt="">
                   </td>
                   <td>{{$item->title}}</td>
                   <td>

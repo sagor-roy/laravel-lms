@@ -23,4 +23,8 @@ class Course extends Model
         'price',
         'discount'
     ];
+
+    public function cate() {
+        return $this->belongsTo(Categories::class,'id');
+    }
 }
