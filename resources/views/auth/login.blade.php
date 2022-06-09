@@ -20,6 +20,7 @@
                         <form class="mt-3" action="{{route('access')}}" method="POST">
                             @csrf
                             <div class="row">
+                                <input type="hidden" name="check" value="login">
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <span>Username <span class="text-danger">*</span></span>

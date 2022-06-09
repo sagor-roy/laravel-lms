@@ -22,7 +22,7 @@
 
 <section class="mt-5">
     <div class="container">
-        <form action="{{url('profile/update/',2)}}" method="POST" enctype="multipart/form-data">
+        <form action="{{route('user.update',Auth::user()->id)}}" method="POST" enctype="multipart/form-data">
             @csrf
         <div class="row">
             <div class="col-md-3">
@@ -34,7 +34,7 @@
                     @else
                     <input type="file" name="img" data-default-file="{{asset(Auth::user()->img)}}" class="dropify" />
                     @endif
-                    <h4 class="mt-3">John Doe</h4>
+                    <h4 class="mt-3">{{Auth::user()->name}}</h4>
                 </div>
 
                 <div class="dashboard-items card card-body mt-4 shadow">

@@ -18,7 +18,7 @@
   <!-- plugin css for this page -->
   <!-- End plugin css for this page -->
   <!-- inject:css -->
-  <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+  <link rel="stylesheet" href="{{asset('asset/toastr/toastr.min.css')}}">
   <link rel="stylesheet" href="{{asset('asset/backend/css/style.css')}}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{asset('asset/backend/images/favicon.png')}}" />
@@ -54,7 +54,7 @@
   <!-- container-scroller -->
 
   <!-- plugins:js -->
-  <script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+  <script src="{{asset('asset/toastr/jquery.min.js')}}"></script>
   <script src="{{asset('asset/backend/vendors/js/vendor.bundle.base.js')}}"></script>
   <script src="{{asset('asset/backend/vendors/js/vendor.bundle.addons.js')}}"></script>
   <!-- endinject -->
@@ -68,7 +68,7 @@
   <script src="{{asset('asset/backend/js/data-table.js')}}"></script>
   <script src="{{asset('asset/backend/vendors/summernote/dist/summernote-bs4.min.js')}}"></script>
   
-  <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="{{asset('asset/toastr/toastr.min.js')}}"></script>
   <script src="{{asset('asset/backend/js/form-addons.js')}}"></script>
 
   <script src="{{asset('asset/backend/js/editorDemo.js')}}"></script>

@@ -11,94 +11,72 @@
 </section>
 
 <section class="mt-5">
-    <div class="container">
+    <div class="container table-responsive">
         <table class="table table-bordered text-center">
             <thead>
                 <tr>
-                    <th>Purchase History</th>
+                    <th>Course</th>
+                    <th>Transaction</th>
+                    <th>Qty</th>
                     <th>Enroll On</th>
                     <th>Payment Mode</th>
                     <th>Total Price</th>
-                    <th>Payment Statuss</th>
+                    <th>Payment Status</th>
+                    <th>Order Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach ($data as $item)
+                @php
+                    $counter = 0;
+                    $order_item = \App\Models\OrderItem::where('order_id',$item->id)->with('course')->get();
+                @endphp
                 <tr>
-                    <td class="d-flex">
-                        <img src="./img/course/1.png" width="120" alt="">
-                        <a class="ms-2" href="">Lorem ipsum dolor sit amet.</a>
-                    </td>
-                    <td>20-2-2022</td>
-                    <td>Bkash</td>
-                    <td>&#2547; 5000</td>
+                    
                     <td>
-                        <span class="badge bg-warning">pending</span>
+                        @foreach ($order_item as $items)
+                        <a href="{{route('single.course',[$items->course_id, $items->course->slug])}}" class="m-0">{{str_title($items->course->title)}}</a> <br>
+                        @php
+                            $counter++;
+                        @endphp
+                        @endforeach
+                    </td>
+                    <td >
+                        {{$item->transaction_id}}
                     </td>
                     <td>
-                        <a href="" class="btn btn-outline-primary">invoice</a>
+                        {{$counter}}
+                    </td>
+                    <td>{{$item->created_at, 'Y-m-d'}}</td>
+                    <td><span class="badge bg-success">{{strtoupper($item->method)}}</span></td>
+                    <td>&#2547; {{number_format($item->amount)}}</td>
+                    <td>
+                        @if ($item->status == 'Complete')
+                        <span class="badge bg-success">complete</span>
+                        @elseif ($item->status == 'Failed')
+                        <span class="badge bg-danger">failed</span>
+                        @elseif ($item->status == 'Canceled')
+                        <span class="badge bg-danger">cancel</span>
+                        @endif
+                        
+                    </td>
+                    <td>
+                        @if ($item->order_status == 'complete')
+                        <span class="badge bg-success">complete</span>
+                        @elseif ($item->order_status == 'processing')
+                        <span class="badge bg-warning">processing</span>
+                        @elseif ($item->order_status == 'cancel')
+                        <span class="badge bg-danger">cancel</span>
+                        @endif
+                        
+                    </td>
+                    <td>
+                        <a href="{{route('user.invoice',$item->id)}}" class="btn btn-outline-primary">invoice</a>
                     </td>
                 </tr>
-                <tr>
-                    <td class="d-flex">
-                        <img src="./img/course/1.png" width="120" alt="">
-                        <a class="ms-2" href="">Lorem ipsum dolor sit amet.</a>
-                    </td>
-                    <td>20-2-2022</td>
-                    <td>Bkash</td>
-                    <td>&#2547; 5000</td>
-                    <td>
-                        <span class="badge bg-warning">pending</span>
-                    </td>
-                    <td>
-                        <a href="" class="btn btn-outline-primary">invoice</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="d-flex">
-                        <img src="./img/course/1.png" width="120" alt="">
-                        <a class="ms-2" href="">Lorem ipsum dolor sit amet.</a>
-                    </td>
-                    <td>20-2-2022</td>
-                    <td>Bkash</td>
-                    <td>&#2547; 5000</td>
-                    <td>
-                        <span class="badge bg-warning">pending</span>
-                    </td>
-                    <td>
-                        <a href="" class="btn btn-outline-primary">invoice</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="d-flex">
-                        <img src="./img/course/1.png" width="120" alt="">
-                        <a class="ms-2" href="">Lorem ipsum dolor sit amet.</a>
-                    </td>
-                    <td>20-2-2022</td>
-                    <td>Bkash</td>
-                    <td>&#2547; 5000</td>
-                    <td>
-                        <span class="badge bg-warning">pending</span>
-                    </td>
-                    <td>
-                        <a href="" class="btn btn-outline-primary">invoice</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="d-flex">
-                        <img src="./img/course/1.png" width="120" alt="">
-                        <a class="ms-2" href="">Lorem ipsum dolor sit amet.</a>
-                    </td>
-                    <td>20-2-2022</td>
-                    <td>Bkash</td>
-                    <td>&#2547; 5000</td>
-                    <td>
-                        <span class="badge bg-warning">pending</span>
-                    </td>
-                    <td>
-                        <a href="" class="btn btn-outline-primary">invoice</a>
-                    </td>
-                </tr>
+                @endforeach
+                
             </tbody>
         </table>
     </div>

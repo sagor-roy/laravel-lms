@@ -7,10 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="{{asset('asset/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
-    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="{{asset('asset/fontawesome/css/all.min.css')}}"/>
+    <link rel="stylesheet" href="{{asset('asset/toastr/toastr.min.css')}}">
     <link rel="stylesheet" href="{{asset('asset/frontend/css/swiper-bundle.min.css')}}" />
     <link rel="stylesheet" href="{{asset('asset/frontend/dist/css/dropify.css')}}" />
+    @yield('style')
     <link rel="stylesheet" href="{{asset('asset/frontend/css/style.css')}}">
     <style>
         .toast {
@@ -21,18 +22,41 @@
 
 <body>
 
+
     @include('frontend.partials.navbar')
     @yield('content')
     @include('frontend.partials.footer')
 
-    <script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script src="{{asset('asset/toastr/jquery.min.js')}}"></script>
     <script src="{{asset('asset/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('asset/frontend/js/swiper-bundle.min.js')}}"></script>
 
-    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="{{asset('asset/toastr/toastr.min.js')}}"></script>
     <script src="{{asset('asset/frontend/dist/js/dropify.js')}}"></script>
 
   {!! Toastr::message() !!}
+
+  <script>
+       $('#courseSearch').keyup(function(){
+            var query = $(this).val();
+            if(query != '') {
+                var _token = "{{csrf_token()}}";
+                $.ajax({
+                url:"{{ route('course-search') }}",
+                method:"POST",
+                data:{query:query, _token:_token},
+                success:function(data){
+                    $('#lists').css('transform','scale(1)');
+                    $('#lists').html(data);
+                }
+                });
+            }
+        });
+
+        $(document).on('click', '#courseSearch', function(){
+            $('#lists').css('transform','scaleY(0)');
+        });
+  </script>
 
   @yield('script')
 

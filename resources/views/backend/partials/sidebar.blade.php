@@ -22,7 +22,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../widgets.html">
+        <a class="nav-link" href="{{route('admin.order')}}">
           <i class="fa fa-puzzle-piece menu-icon"></i>
           <span class="menu-title">Orders</span>
         </a>

@@ -74,68 +74,56 @@
 @endif
 
 
-
-{{-- <section class="mt-3">
+@if (count($data) > 0)
+<section class="mt-3">
     <div class="container">
         <div class="title mb-2">
             <h5 class="fw-bold border-bottom border-2 border-primary d-inline">My Purchase Courses :</h5>
         </div>
         <div class="swiper recent">
             <div class="swiper-wrapper">
-                <div class="swiper-slide course">
-                    <img src="{{asset('asset/frontend/img/course/1.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                @foreach ($data as $course)
+                    @foreach ($course->item as $items)
+                    <div class="swiper-slide course">
+                        <img src="{{asset($items->course->img)}}" alt="img">
+                        <div class="card-body">
+                            <h6>{{str_title($items->course->title)}}</h6>
+                            <div class="sort">
+                                <p>by Hapijul Islam</p>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
                         </div>
+                        @if ($items->course->type == 'paid')
+                        <h6 class="text-end me-2">&#2547; 
+                            @if ($items->course->discount == null)
+                                {{number_format($items->course->price)}}
+                            @else
+                                @php
+                                    $price = $items->course->price * $items->course->discount / 100;
+                                    $final = $items->course->price - $price;
+                                @endphp
+                                {{number_format($final)}}
+                                <del> &#2547;{{number_format($items->course->price)}}</del>
+                            @endif 
+                        </h6>
+                        @else
+                            <div class="badge bg-danger float-end">Free</div>
+                        @endif
+                        <a href="{{route('single.course',[$items->course->id, $items->course->slug])}}" class="link"></a>
                     </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-                <div class="swiper-slide course">
-                    <img src="{{asset('asset/frontend/img/course/2.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
-                <div class="swiper-slide course">
-                    <img src="{{asset('asset/frontend/img/course/3.png')}}" alt="">
-                    <div class="card-body">
-                        <h6>PHP Laravel Advanced Course</h6>
-                        <div class="sort">
-                            <p>by Hapijul Islam</p>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <h6 class="float-end me-2">&#2547; 4,000 <del>5,000</del></h6>
-                    <a href="#" class="link"></a>
-                </div>
+                    @endforeach
+                @endforeach
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
         </div>
     </div>
-</section> --}}
+</section>
+@endif
 
 <section class="mt-3">
     <div class="container">

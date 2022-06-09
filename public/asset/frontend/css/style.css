@@ -1,10 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-* {
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-}
 
 html,
 body {
@@ -105,7 +100,7 @@ form.d-flex.search {
     border: 1px solid rgb(221, 221, 221);
     background-color: rgb(221, 221, 221);
     border-radius: 5px;
-    margin-right: 40px;
+    /* margin-right: 40px; */
 }
 
 .swiper {
@@ -421,4 +416,46 @@ a {
     color: #212529;
     padding: 7px 0;
     display: block;
+}
+
+.search__list {
+    position: absolute;
+    z-index: 9;
+    background-color: #f9fafb;
+    width: 100%;
+    box-shadow: 0 1px 3px 1px #6c757d;
+    margin-top: 15px;
+    border-radius: 8px;
+    right: -5px;
+    padding: 10px;
+    transition: all ease-in 0.5s;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+.history__list > span {
+    background-color: black;
+    border-radius: 25px;
+    padding-left: 5px;
+    margin: 2px;
+}
+
+.history__list > span > a {
+    color: white;
+    font-size: 12px;
+    padding: 1px 5px;
+}
+
+.history__list > span > a:last-child {
+    background-color: #e0e0e0;
+    color: black;
+    padding: 0px 5px;
+    border-radius: 25px;
+    margin-right: 5px;
+}
+
+.search__list>ul {
+    height: 30vh;
+    overflow: hidden;
+    overflow-y: auto;
 }

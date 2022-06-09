@@ -1,3 +1,8 @@
+<style>
+    li.noti-active {
+    background-color: #e9ecef;
+}
+</style>
 <header>
     <nav class="nav bg-white shadow-sm py-2">
         <div class="container">
@@ -7,18 +12,61 @@
                         <img src="{{asset('asset/frontend/img/iconic-logo.png')}}" class="img-fluid" width="180" alt="logo">
                     </a>
                 </div>
-                <div class="col-md-6">
-                    <form class="d-flex search">
-                        <input class="form-control form-control-lg" type="search" placeholder="Search">
+                <div class="col-md-6 position-relative">
+                    <form class="d-flex search" action="{{route('search')}}" method="get">
+                        <input required name="query" class="form-control form-control-lg" id="courseSearch" type="search" placeholder="Search">
                         <button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
+                    <div id="lists" class="search__list">
+                        
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <div class="d-flex justify-content-between align-items-center">
                         @auth
-                        <div class="list">
-                            <a href=""><i class="fa-solid fa-bell"></i></a>
-                            <span>0</span>
+                        <div class="">
+                            <a href=""></a>
+                            
+                        </div>
+                        <div class="dropdown list">
+                            <button class="border-0 bg-transparent text-primary" type="button" id="drp1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-bell"></i>
+                            </button>
+                            <span>{{count(Auth()->user()->unreadNotifications)}}</span>
+                            <ul class="dropdown-menu mt-2 py-0" aria-labelledby="drp1">
+                                <li class="py-2 ps-2">Notifications</li>
+                                <hr class="m-0">
+                                @foreach (Auth()->user()->unreadNotifications as $notification)
+                                <li class="noti-active">
+                                    <a class="dropdown-item py-1" href="{{route('user.noti.read',$notification->id)}}">
+                                        <div class="d-flex">
+                                            <img src="{{asset($notification->data['img'])}}" width="70" class="me-2" alt="img">
+                                            <div>
+                                                {{str_title($notification->data['title'])}}
+                                                <p>You are enrolled</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <hr class="m-0">
+                                @endforeach
+                                @foreach (Auth()->user()->readNotifications as $notification)
+                                <li>
+                                    <a class="dropdown-item py-1" href="{{route('user.noti.read',$notification->id)}}">
+                                        <div class="d-flex">
+                                            <img src="{{asset($notification->data['img'])}}" width="70" class="me-2" alt="img">
+                                            <div>
+                                                {{str_title($notification->data['title'])}}
+                                                <p>You are enrolled</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <hr class="m-0">
+                                @endforeach
+                                <a href="#" class="bg-secondary py-1 text-white d-block text-center">Clear</a>
+                            </ul>
                         </div>
                         @endauth
                         <div class="list">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
@@ -26,20 +27,52 @@ class AuthController extends Controller
 
     // access 
     public function login(Request $request) {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        if ($request->input('check') == 'login') {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+    
+            if($validator->fails()) {
+                return redirect()->back()->withErrors(Toastr::error($validator->errors()->all()[0]))->withInput();
+            }
+        }
+
         
         try {
+            if (isset($request->buy)) {
+                $course = Course::find($request->input('buy'));
+                $cart = \session()->has('cart') ? \session()->get('cart') : [];
+                if (!key_exists($course->id, $cart)) {
+                    $cart[$course->id] = [
+                        'id' => $course->id,
+                        'title' => $course->title,
+                        'slug' => $course->slug,
+                        'img' => $course->img,
+                        'type' => $course->type,
+                        'discount' => $course->discount,
+                        'price' => $course->price
+                    ];
+                    \session(['cart' => $cart]);
+                }
+            }
+
             $credential = $request->only('email', 'password');
             if (Auth::attempt($credential)) {
                 if (Auth::user()->role == 'super') {
                     Toastr::success('Welcome to Dashboard');
                     return redirect()->route('admin.dashboard');
                 } 
-                Toastr::success('Login Successfull!!');
-                return redirect()->route('home');
+                if ($request->input('check') == 'login') {
+                    Toastr::success('Login Successful!!');
+                    return redirect()->route('home');
+                }
+                return redirect()->route('user.checkout');
             }
             Toastr::error('Creadential does\'t match our record');
             Session::flash('type','error');
@@ -70,7 +103,7 @@ class AuthController extends Controller
             ]);
             Auth::login($user);
             Toastr::success('Thank you for Registration !!');
-            return redirect()->route('user.profile');
+            return redirect()->route('home');
         } catch (Exception $error) {
             Toastr::error('Something went wrong!!');
             Session::flash('type','error');

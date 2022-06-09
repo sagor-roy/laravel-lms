@@ -21,7 +21,7 @@
       <div class="row">
         <div class="col-12">
           <div class="table-responsive">
-            <table id="order-listing" class="table">
+            <table id="" class="table order-listing">
               <thead>
                 <tr>
                     <th>
