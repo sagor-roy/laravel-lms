@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CourseEnrolledNotification extends Notification
+class PostNotification extends Notification implements ShouldQueue
 {
     use Queueable;
     public $item;
@@ -33,6 +33,7 @@ class CourseEnrolledNotification extends Notification
         return ['database'];
     }
 
+
     /**
      * Get the array representation of the notification.
      *
@@ -45,7 +46,7 @@ class CourseEnrolledNotification extends Notification
             'id' => $this->item['id'],
             'title' => $this->item['title'],
             'img' => $this->item['img'],
-            'message' => null
+            'message' => 'New course added!!'
         ];
     }
 }

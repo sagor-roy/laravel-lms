@@ -7,19 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CourseEnrolledNotification extends Notification
+class RepliesNotification extends Notification
 {
     use Queueable;
-    public $item;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($item)
+    public function __construct()
     {
-        $this->item = $item;
+        //
     }
 
     /**
@@ -33,6 +32,7 @@ class CourseEnrolledNotification extends Notification
         return ['database'];
     }
 
+
     /**
      * Get the array representation of the notification.
      *
@@ -42,10 +42,10 @@ class CourseEnrolledNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'id' => $this->item['id'],
-            'title' => $this->item['title'],
-            'img' => $this->item['img'],
-            'message' => null
+            'id' => null,
+            'title' => null,
+            'img' => null,
+            'message' => 'Admin replies to your comment'
         ];
     }
 }

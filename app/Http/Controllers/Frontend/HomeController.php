@@ -8,6 +8,8 @@ use App\Models\Chapter;
 use App\Models\Comments;
 use App\Models\Course;
 use App\Models\Orders;
+use App\Models\User;
+use App\Notifications\RepliesNotification;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -129,6 +131,8 @@ class HomeController extends Controller
             'parent_id' => $request->input('parent_id'),
             'comment' => $request->input('comments'),
         ]);
+        $user = User::find($request->comment_user_id);
+        $user->notify(new RepliesNotification);
         return redirect()->back();
     }
 

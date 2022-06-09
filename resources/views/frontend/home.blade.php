@@ -32,17 +32,37 @@
         <div class="swiper recent">
             <div class="swiper-wrapper">
                 @foreach ($courses as $item)
+                @php
+                    $total = 0;
+                    $learn = 0;
+                    $price = 0;
+                    $values = 0;
+                    $rating = \App\Models\Comments::where('post_id',$item['id'])->where('price','!=',null)->where('learn','!=',null)->where('value','!=',null)->get();
+                    foreach ($rating as $items) {
+                        $value = $items->learn + $items->price + $items->value;
+                        $total += $value / 3;
+                        $learn += $items->learn;
+                        $price += $items->price;
+                        $values += $items->value;
+                    }
+                    $gtotal = $total == 0 ? 0 : $total/count($rating);
+                    $min = 5-$gtotal;
+                    $learn = $learn == 0 ? 0 : $learn / count($rating);
+                    $price = $price == 0 ? 0 : $price / count($rating);
+                    $valuess = $values == 0 ? 0 : $values / count($rating);
+                @endphp
                 <div class="swiper-slide course">
                     <img src="{{asset($item['img'])}}" alt="">
                     <div class="card-body">
                         <h6>{{str_title($item['title'])}}</h6>
                         <div class="sort">
                             <p>by Hapijul Islam</p>
+                            @for ($i=0; $i < intval($gtotal); $i++)
                             <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                            @endfor
+                            @for ($i=0; $i < round($min,1); $i++)
+                            <i class="fas fa-star text-muted"></i>
+                            @endfor
                         </div>
                     </div>
                     @if ($item['type'] == 'paid')
@@ -84,17 +104,37 @@
             <div class="swiper-wrapper">
                 @foreach ($data as $course)
                     @foreach ($course->item as $items)
+                    @php
+                        $total = 0;
+                        $learn = 0;
+                        $price = 0;
+                        $values = 0;
+                        $rating = \App\Models\Comments::where('post_id',$items->course->id)->where('price','!=',null)->where('learn','!=',null)->where('value','!=',null)->get();
+                        foreach ($rating as $item) {
+                            $value = $item->learn + $item->price + $item->value;
+                            $total += $value / 3;
+                            $learn += $item->learn;
+                            $price += $item->price;
+                            $values += $item->value;
+                        }
+                        $gtotal = $total == 0 ? 0 : $total/count($rating);
+                        $min = 5-$gtotal;
+                        $learn = $learn == 0 ? 0 : $learn / count($rating);
+                        $price = $price == 0 ? 0 : $price / count($rating);
+                        $valuess = $values == 0 ? 0 : $values / count($rating);
+                    @endphp
                     <div class="swiper-slide course">
                         <img src="{{asset($items->course->img)}}" alt="img">
                         <div class="card-body">
                             <h6>{{str_title($items->course->title)}}</h6>
                             <div class="sort">
                                 <p>by Hapijul Islam</p>
+                                @for ($i=0; $i < intval($gtotal); $i++)
                                 <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
+                                @endfor
+                                @for ($i=0; $i < round($min,1); $i++)
+                                <i class="fas fa-star text-muted"></i>
+                                @endfor
                             </div>
                         </div>
                         @if ($items->course->type == 'paid')

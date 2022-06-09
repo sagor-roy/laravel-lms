@@ -7,9 +7,13 @@ use App\Models\Categories;
 use App\Models\Chapter;
 use App\Models\Classes;
 use App\Models\Course;
+use App\Models\User;
+use App\Notifications\PostNotification;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -94,6 +98,7 @@ class CourseController extends Controller
             return redirect()->back();
         }
     }
+
 
     public function duplicate($id)
     {

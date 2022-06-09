@@ -36,6 +36,7 @@
                     @csrf
                     <input type="hidden" name="parent_id" value="{{$comment->id}}">
                     <input type="hidden" name="post_id" value="{{$comment->post_id}}">
+                    <input type="hidden" name="comment_user_id" value="{{$comment->user_id}}">
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                     <div class="input-group">
                     <input type="text" required class="form-control" name="comments" placeholder="Your replies...">
