@@ -199,6 +199,7 @@
                     
                     <div class="review">
                         @auth
+                        @if (Auth::user()->role !== 'super')
                         <div class="title mb-4">
                             <h5 class="fw-bold border-bottom border-2 border-primary d-inline">Review :</h5>
                         </div>
@@ -271,12 +272,13 @@
                         </div>
                         <hr class="my-3">
                         <div class="mb-3">
-                            <textarea name="comment" placeholder="Write a review......" class="form-control"
+                            <textarea name="comment" required placeholder="Write a review......" class="form-control"
                                 rows="5"></textarea>
                         </div>
                         <button id="submit" type="submit" class="btn-style red-btn border-0">SUBMIT</button>
                         </form>
                         <hr class="my-4">
+                        @endif
                         @endauth
                         
                         <div id="reviews_box" class="review-box">

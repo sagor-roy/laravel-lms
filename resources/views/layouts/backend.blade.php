@@ -62,6 +62,7 @@
   <script src="{{asset('asset/backend/js/off-canvas.js')}}"></script>
   <script src="{{asset('asset/backend/js/hoverable-collapse.js')}}"></script>
   <script src="{{asset('asset/backend/js/misc.js')}}"></script>
+  <script src="{{asset('asset/editor/tinymce.min.js')}}"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
   <script src="{{asset('asset/backend/js/dashboard.js')}}"></script>
@@ -74,12 +75,38 @@
   <script src="{{asset('asset/backend/js/editorDemo.js')}}"></script>
 
 
+
   {!! Toastr::message() !!}
   <!-- End custom js for this page-->
 
   @yield('script')
 
 <script>
+  tinymce.init({
+        selector: 'textarea#detail',
+        height: 250,
+        menubar: 'edit view insert format tools table tc',
+        autosave_ask_before_unload: true,
+        autosave_interval: "30s",
+        autosave_prefix: "{path}{query}-{id}-",
+        autosave_restore_when_empty: false,
+        autosave_retention: "2m",
+        image_advtab: true,
+        image_dimensions: false,
+        image_class_list: [{
+            title: 'Responsive',
+            value: 'img-fluid'
+        }],
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks fullscreen',
+            'insertdatetime media table paste wordcount',
+            'textcolor',
+        ],
+        toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media  template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+        content_css: '//www.tiny.cloud/css/codepen.min.css'
+        });
+
   $(function(){
     $('#selectAll').on('change',function(e){
       let check = $(this).prop('checked') == true ? 1:0;

@@ -19,6 +19,7 @@
     </div>
 </section>
 
+
 @if (Auth::check())
 @php
     $courses = \session()->has('recent') ? \session()->get('recent') : [];
