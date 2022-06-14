@@ -189,7 +189,7 @@
                           </div>
                       </div>
                       <div class="d-inline-block">
-                        <i class="fas fa-lira-sign icon-lg text-primary"></i>                               
+                        <i class="fas fa-lira-sign icon-lg text-info"></i>                               
                       </div>
                   </div>
               </div>
@@ -212,6 +212,88 @@
               </div>
           </div>
       </div>
+      <div class="col-md-12 grid-margin">
+          <div class="card">
+              <div class="card-header">
+                  <h5 class="card-title m-0">Monthly Registered User in <?php echo date('Y')?></h5>
+              </div>
+              <div class="card-body">
+                <canvas height='100' id="chartjs-bar-chart" class="chartjs-chart"></canvas>
+              </div>
+          </div>
+      </div>
   </div>
   </div>
+
+  @section('script')
+  <script>
+    let datas = @json($datas);
+    "use strict";
+    $(document).ready(function () {
+        var barChartID = document.getElementById("chartjs-bar-chart").getContext('2d');
+        var barChart = new Chart(barChartID, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
+                    'Nov',
+                    'Dec'
+                ],
+                datasets: [{
+                    label: 'Monthly Registred Users',
+                    backgroundColor: ["#506fe4", "#506fe4", "#506fe4", "#506fe4", "#506fe4",
+                        "#506fe4", "#506fe4", "#506fe4", "#506fe4", "#506fe4",
+                        "#506fe4",
+                        "#506fe4", "#506fe4"
+                    ],
+                    borderColor: ["#506fe4", "#506fe4", "#506fe4", "#506fe4", "#506fe4",
+                        "#506fe4", "#506fe4", "#506fe4", "#506fe4", "#506fe4",
+                        "#506fe4",
+                        "#506fe4", "#506fe4"
+                    ],
+                    borderWidth: 1,
+                    data: datas,
+                }]
+            },
+            options: {
+
+
+                responsive: true,
+                legend: {
+                    position: 'top',
+                    height: 100
+                },
+                title: {
+                    display: false,
+                    text: 'Chart.js Bar Chart'
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        },
+                        gridLines: {
+                            color: 'rgba(0,0,0,0.05)',
+                            lineWidth: 1,
+                            borderDash: [0]
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        },
+
+                        gridLines: {
+                            color: 'rgba(0,0,0,0.05)',
+                            lineWidth: 1,
+                            borderDash: [0]
+                        }
+                    }]
+                }
+            }
+        });
+    });
+</script>
+  @endsection
 @endsection

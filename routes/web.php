@@ -102,6 +102,18 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function(){
         Route::get('class/delete/{id}',[CourseController::class,'classDelete'])->name('class.destroy');
     });
 
+    // role
+    Route::prefix('role')->name('role.')->group(function(){
+        Route::get('/',[DashboardController::class,'roleIndex'])->name('index');
+        Route::get('user',[DashboardController::class,'roleUser'])->name('user');
+        Route::get('list',[DashboardController::class,'list'])->name('list');
+        Route::get('create',[DashboardController::class,'create'])->name('create');
+        Route::post('store',[DashboardController::class,'store'])->name('store');
+        Route::get('edit/{id}',[DashboardController::class,'edit'])->name('edit');
+        Route::post('update/{id}',[DashboardController::class,'update'])->name('update');
+        Route::get('destroy/{id}',[DashboardController::class,'destroy'])->name('destroy');
+    });
+
     // order 
     Route::get('order',[OrderController::class,'index'])->name('order');
     Route::post('update/{id}',[OrderController::class,'update'])->name('order.status');

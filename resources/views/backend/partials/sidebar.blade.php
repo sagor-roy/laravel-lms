@@ -39,5 +39,18 @@
           <span class="menu-title">Course</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-toggle="collapse" href="#page-layouts" aria-expanded="false" aria-controls="page-layouts">
+          <i class="fab fa-trello menu-icon"></i>
+          <span class="menu-title">Role Management</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="page-layouts" style="">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{route('admin.role.index')}}">User</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{route('admin.role.list')}}">Role</a></li>
+          </ul>
+        </div>
+      </li>
     </ul>
   </nav>

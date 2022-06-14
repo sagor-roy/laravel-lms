@@ -75,6 +75,10 @@
   <script src="{{asset('asset/backend/js/editorDemo.js')}}"></script>
 
 
+  <script src="{{asset('asset/chart.js/chart.min.js')}}"></script>
+  <script src="{{asset('asset/chart.js/chart-bundle.min.js')}}"></script>
+
+
 
   {!! Toastr::message() !!}
   <!-- End custom js for this page-->
