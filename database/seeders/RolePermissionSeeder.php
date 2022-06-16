@@ -36,6 +36,22 @@ class RolePermissionSeeder extends Seeder
                     'course.edit',
                     'course.delete',
                 ]
+            ],
+            [
+                'group_name' => 'user',
+                'permission' => [
+                    'user.create',
+                    'user.edit',
+                    'user.delete',
+                ]
+            ],
+            [
+                'group_name' => 'role',
+                'permission' => [
+                    'role.create',
+                    'role.edit',
+                    'role.delete',
+                ]
             ]
         ];
 

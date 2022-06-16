@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -72,6 +73,10 @@ class User extends Authenticatable
             }
         }
         return $hasPermission;
+    }
+
+    public function roles(){
+        return $this->belongsTo(Role::class,'id');
     }
 
 }

@@ -40,12 +40,17 @@
                                 @foreach (Auth()->user()->unreadNotifications as $notification)
                                 <li class="noti-active">
                                     <a class="dropdown-item py-1" href="{{route('user.noti.read',$notification->id)}}">
-                                        <div class="d-flex">
+                                        <div class="d-flex align-items-center">
+                                            @if ($notification->data['img'] !== null)
                                             <img src="{{asset($notification->data['img'])}}" width="70" class="me-2" alt="img">
+                                            @else
+                                            <i class="fa-solid fa-comment-dots fa-1x me-2"></i>
+                                            @endif
+                                            
                                             <div>
                                                 {{str_title($notification->data['title'])}}
                                                 @if ($notification->data['message'] !== null)
-                                                <p>{{$notification->data['message']}}</p>
+                                                <p class="m-0">{{$notification->data['message']}}</p>
                                                 @else
                                                 <p>You are enrolled</p>
                                                 @endif
@@ -58,7 +63,7 @@
                                 @foreach (Auth()->user()->readNotifications as $notification)
                                 <li>
                                     <a class="dropdown-item py-1" href="{{route('user.noti.read',$notification->id)}}">
-                                        <div class="d-flex">
+                                        <div class="d-flex align-items-center">
                                             @if ($notification->data['img'] !== null)
                                             <img src="{{asset($notification->data['img'])}}" width="70" class="me-2" alt="img">
                                             @else
@@ -68,7 +73,7 @@
                                             <div>
                                                 {{str_title($notification->data['title'])}}
                                                 @if ($notification->data['message'] !== null)
-                                                <p>{{$notification->data['message']}}</p>
+                                                <p class="m-0">{{$notification->data['message']}}</p>
                                                 @else
                                                 <p>You are enrolled</p>
                                                 @endif

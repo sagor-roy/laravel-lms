@@ -43,7 +43,8 @@ class DashboardController extends Controller
 
     // role
     public function roleIndex(){
-        return view('backend.role.index');
+        $user = User::get();
+        return view('backend.role.index',compact('user'));
     }
 
     public function roleUser(){

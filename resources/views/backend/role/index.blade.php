@@ -37,18 +37,19 @@
                 </tr>
               </thead>
               <tbody>
+                @foreach ($user as $item)
                <tr>
                    <td>
                     <input type="checkbox" >
                    </td>
                    <td>
-                       John
+                       {{$item->name}}
                    </td>
                    <td>
-                       john@gmail.com
+                    {{$item->email}}
                    </td>
                    <td>
-                       Admin
+                    xxxxxxx
                    </td>
                    <td>
                     <label class="switch">
@@ -61,6 +62,7 @@
                     <a title="Delete" data-toggle="modal" href="" class="text-danger ml-2"><i class="fas fa-trash-alt"></i></a>
                    </td>
                </tr>
+               @endforeach
               </tbody>
             </table>
           </div>
