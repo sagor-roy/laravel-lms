@@ -403,9 +403,6 @@ a {
     text-decoration: none !important;
 }
 
-.column-top {
-    margin-top: -240px;
-}
 
 .dashboard-items>ul {
     list-style: none;
@@ -433,20 +430,20 @@ a {
     transform-origin: top;
 }
 
-.history__list > span {
+.history__list>span {
     background-color: black;
     border-radius: 25px;
     padding-left: 5px;
     margin: 2px;
 }
 
-.history__list > span > a {
+.history__list>span>a {
     color: white;
     font-size: 12px;
     padding: 1px 5px;
 }
 
-.history__list > span > a:last-child {
+.history__list>span>a:last-child {
     background-color: #e0e0e0;
     color: black;
     padding: 0px 5px;
@@ -458,4 +455,16 @@ a {
     height: 30vh;
     overflow: hidden;
     overflow-y: auto;
+}
+
+@media (min-width:768px) {
+    div.sticky {
+        position: fixed;
+        top: 0;
+        min-width: 355px;
+    }
+
+    .column-top {
+        margin-top: -240px;
+    }
 }

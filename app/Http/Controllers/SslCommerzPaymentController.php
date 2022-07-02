@@ -96,7 +96,7 @@ class SslCommerzPaymentController extends Controller
                     'amount' => $post_data['total_amount'],
                     'method' => 'ssl',
                     'status' => 'Pending',
-                    'order_status' => 'processing',
+                    'order_status' => 'complete',
                     'transaction_id' => $post_data['tran_id'],
                     'currency' => $post_data['currency'],
                     'created_at' => date("Y-m-d H:i:s"),
