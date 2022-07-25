@@ -133,7 +133,7 @@ class HomeController extends Controller
         ]);
         $user = User::find($request->comment_user_id);
         $user->notify(new RepliesNotification);
-        return redirect()->back();
+        return response()->json(200);
     }
 
     public function addCart($id) {
