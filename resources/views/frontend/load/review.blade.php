@@ -91,6 +91,10 @@
             processData: false,
             success: (result)=>{
                 $('#reviews_box').load('/user/comments/'+id+'');
+                $.notify("Thanks to your replies",{ position:"top right",className: "success"});
+            },
+            error:(res)=>{
+                $.notify(res.responseJSON.errors.comments,{ position:"top right",className: "error"});
             }
         })
     })

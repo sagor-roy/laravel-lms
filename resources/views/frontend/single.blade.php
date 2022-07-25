@@ -449,6 +449,7 @@
                         feedbackFunction();
                         $(this)[0].reset();
                         button.html('SUBMIT')
+                        $.notify("Thanks to your comments",{ position:"top right",className: "success"});
                     },
                     error: (error) => {
                         alert('Please check the all input field');

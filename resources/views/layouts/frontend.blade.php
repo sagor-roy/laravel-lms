@@ -33,6 +33,7 @@
 
     <script src="{{asset('asset/toastr/toastr.min.js')}}"></script>
     <script src="{{asset('asset/frontend/dist/js/dropify.js')}}"></script>
+    <script src="{{asset('asset/notify.js')}}"></script>
 
   {!! Toastr::message() !!}
 

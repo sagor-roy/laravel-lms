@@ -125,6 +125,9 @@ class HomeController extends Controller
     }
 
     public function repliesStore(Request $request) {
+        $request->validate([
+            'comments'=>'required'
+        ]);
         Comments::create([
             'user_id' => $request->input('user_id'),
             'post_id' => $request->input('post_id'),
