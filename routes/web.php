@@ -50,6 +50,10 @@ Route::prefix('user')->middleware('auth')->name('user.')->group(function(){
     // player
     Route::get('preview/{id}',[UserController::class,'player'])->name('player');
 
+    // quiz
+    Route::get('chapter/quiz/{id}',[UserController::class,'quiz'])->name('quiz');
+    Route::post('store/quiz/{id}',[UserController::class,'storeQues'])->name('quiz.store');
+
 });
 
 // Auth

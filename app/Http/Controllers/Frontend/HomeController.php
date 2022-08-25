@@ -19,44 +19,49 @@ use Illuminate\Support\Str;
 class HomeController extends Controller
 {
     // index
-    public function index() {
+    public function index()
+    {
         $counter = 0;
         $data = [];
-        $cate = Categories::where('status','=','1')->with('courses')->get();
+        $cate = Categories::where('status', '=', '1')->with('courses')->get();
         $courses = \session()->has('recent') ? \session()->get('recent') : [];
         if (Auth::check()) {
             foreach ($courses as $item) {
                 if ($item['user_id'] == Auth::user()->id) {
                     $counter++;
                 }
-             }
+            }
 
-            $data = Orders::where(['user_id'=>Auth::user()->id, 'order_status'=>'complete'])
-            ->with('item.course')
-            ->get();
+            $data = Orders::where(['user_id' => Auth::user()->id, 'order_status' => 'complete'])
+                ->with('item.course')
+                ->get();
         }
-        $totalView=$counter;
-        
-        return view('frontend.home',compact('cate','totalView','data'));
+        $totalView = $counter;
+
+        return view('frontend.home', compact('cate', 'totalView', 'data'));
     }
 
     // cart
-    public function cart() {
+    public function cart()
+    {
         $carts = \session()->has('cart') ? \session()->get('cart') : [];
-        return view('frontend.cart',compact('carts'));
+        return view('frontend.cart', compact('carts'));
     }
-    
-    public function allCourse() {
+
+    public function allCourse()
+    {
         $cate = Categories::with('courses')->get();
-        return view('frontend.load.tab',compact('cate'));
+        return view('frontend.load.tab', compact('cate'));
     }
-    
-    public function cateCourse($id) {
-        $cate = Categories::where('id',$id)->with('courses')->get();
-        return view('frontend.load.tab',compact('cate'));
+
+    public function cateCourse($id)
+    {
+        $cate = Categories::where('id', $id)->with('courses')->get();
+        return view('frontend.load.tab', compact('cate'));
     }
-    
-    public function singleCourse($id) {
+
+    public function singleCourse($id)
+    {
         $check = false;
         $data = Course::find($id);
         if (Auth::check()) {
@@ -75,7 +80,7 @@ class HomeController extends Controller
                 \session(['recent' => $course]);
             }
 
-            $coursess = Orders::where('user_id',Auth::user()->id)->with('item')->get();
+            $coursess = Orders::where('user_id', Auth::user()->id)->with('item')->get();
             foreach ($coursess as $item) {
                 foreach ($item->item as $course) {
                     if ($course->course_id == $id && $item->order_status == 'complete') {
@@ -83,35 +88,38 @@ class HomeController extends Controller
                     }
                 }
             }
-            
         }
-        $recent = Course::where('id','!=',$id)->orderBy('id','DESC')->limit(5)->get();
-        $chptr = Chapter::where('course_id',$id)->with('chapters')->get();
+        $recent = Course::where('id', '!=', $id)->orderBy('id', 'DESC')->limit(5)->get();
+        $chptr = Chapter::where('course_id', $id)->with('chapters', 'quiz.ques')->get();
 
-        $comments = Course::where('id',$id)->with('comment.user','comment.replies','comment.replies.user')->get();
+        $comments = Course::where('id', $id)->with('comment.user', 'comment.replies', 'comment.replies.user')->get();
         // dd($comments->toArray());
-        return view('frontend.single',compact('data','chptr','check','recent','comments'));
+        // return $chptr;
+        return view('frontend.single', compact('data', 'chptr', 'check', 'recent', 'comments'));
     }
 
     // comment show with ajax
-    public function userComments($id) {
-        $comments = Course::where('id',$id)->with('comment.user','comment.replies','comment.replies.user')->get();
-        return view('frontend.load.review',compact('comments'));
+    public function userComments($id)
+    {
+        $comments = Course::where('id', $id)->with('comment.user', 'comment.replies', 'comment.replies.user')->get();
+        return view('frontend.load.review', compact('comments'));
     }
     // feedback show with ajax
-    public function userFeedback($id) {
-        return view('frontend.load.feedback',compact('id'));
+    public function userFeedback($id)
+    {
+        return view('frontend.load.feedback', compact('id'));
     }
 
-    public function commentStore(Request $request) {
+    public function commentStore(Request $request)
+    {
         $request->validate([
-            'comment'=>'required',
-            'learn'=>'required|array',
-            'learn.*'=>'int',
-            'price'=>'required|array',
-            'price.*'=>'int',
-            'value'=>'required|array',
-            'value.*'=>'int'
+            'comment' => 'required',
+            'learn' => 'required|array',
+            'learn.*' => 'int',
+            'price' => 'required|array',
+            'price.*' => 'int',
+            'value' => 'required|array',
+            'value.*' => 'int'
         ]);
         Comments::create([
             'user_id' => $request->input('user_id'),
@@ -124,9 +132,10 @@ class HomeController extends Controller
         return response()->json('Success');
     }
 
-    public function repliesStore(Request $request) {
+    public function repliesStore(Request $request)
+    {
         $request->validate([
-            'comments'=>'required'
+            'comments' => 'required'
         ]);
         Comments::create([
             'user_id' => $request->input('user_id'),
@@ -139,7 +148,8 @@ class HomeController extends Controller
         return response()->json(200);
     }
 
-    public function addCart($id) {
+    public function addCart($id)
+    {
         $course = Course::find($id);
         $cart = \session()->has('cart') ? \session()->get('cart') : [];
         if (key_exists($course->id, $cart)) {
@@ -179,27 +189,30 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         if ($request->get('query')) {
             $query = $request->get('query');
             $data = Course::where('title', 'LIKE', "%{$query}%")->where('status', 1)->limit(10)->get();
             $tags = \session()->has('tags') ? \session()->get('tags') : [];
-            return view('frontend.load.search_list',compact('data','tags'));
+            return view('frontend.load.search_list', compact('data', 'tags'));
         }
     }
 
-    public function searchCourse(Request $request) {
+    public function searchCourse(Request $request)
+    {
         $query = $request->input('query');
         $tags = \session()->has('tags') ? \session()->get('tags') : [];
-        $tags[$id = rand(1,99)]  = [
+        $tags[$id = rand(1, 99)]  = [
             'name' => $query
         ];
         \session(['tags' => $tags]);
         $data = Course::where('title', 'LIKE', "%{$query}%")->where('status', 1)->limit(10)->get();
-        return view('frontend.search',compact('data'));
+        return view('frontend.search', compact('data'));
     }
 
-    public function singleHis($id) {
+    public function singleHis($id)
+    {
         $tags = \session()->has('tags') ? \session()->get('tags') : [];
         if (key_exists($id, $tags)) {
             unset($tags[$id]);
@@ -209,10 +222,10 @@ class HomeController extends Controller
         abort(404);
     }
 
-    public function hisForget() {
+    public function hisForget()
+    {
         Session::forget('tags');
         Toastr::success('All History Are Delete');
         return redirect()->back();
     }
-    
 }

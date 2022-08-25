@@ -18,3 +18,12 @@ if (!function_exists('str_title')) {
         return $string;
     }
 }
+
+
+// if (!function_exists('resultFunc')) {
+//     function resultFunc($quiz, $answer)
+//     {
+       
+//     }
+// }
+

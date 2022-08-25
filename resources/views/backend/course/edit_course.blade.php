@@ -67,6 +67,11 @@ a.active {background-color: #ddd;}
                     <i class="fas fa-arrow-circle-right"></i> Course Classes
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link @if(Session::get('status')=='quiz') active show @endif" id="quiz-tab-vertical" onclick="activeFunc('quiz')" data-toggle="tab" href="#quiz-2" role="tab" aria-controls="quiz-2" aria-selected="false">
+                    <i class="fas fa-arrow-circle-right"></i> Chapter Quiz
+                  </a>
+                </li>
               </ul>
             </div>
             <div class="col-md-9">
@@ -401,6 +406,46 @@ a.active {background-color: #ddd;}
                                   </div>
                                 </div>
                                 @endforeach
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade @if(Session::get('status')=='quiz') active show @endif" id="quiz-2" role="tabpanel" aria-labelledby="quiz-tab-vertical">
+                  <div class="card border-0">
+                    <div class="card-body p-0">
+                      <h4 class="card-title text-right">
+                        <a href="#quiz" data-toggle="modal" class="btn btn-primary"><i class="fas fa-plus"></i> New Quiz</a>
+                      </h4>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="table-responsive">
+                            <table class="order-listing table">
+                              <thead>
+                                <tr>
+                                    <th>
+                                      <input type="checkbox" id="selectAll">
+                                    </th>
+                                    <th>Chapter</th>
+                                    <th>Quiz</th>
+                                    <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>
+                                    <input type="checkbox" name="check[]">
+                                  </td>
+                                  <td>Lorem ipsum dolor sit amet.</td>
+                                  <td>Lorem, ipsum dolor.</td>
+                                  <td>
+                                    <a title="Edit" data-toggle="modal" href=""><i class="fas fa-pen"></i></a>
+                                    <a title="Delete" data-toggle="modal" href="" class="text-danger ml-2"><i class="fas fa-trash-alt"></i></a>
+                                  </td>
+                                </tr>
                               </tbody>
                             </table>
                           </div>

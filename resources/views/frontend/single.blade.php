@@ -102,6 +102,7 @@
                                                 </div>
                                             </button>
                                         </h2>
+
                                         <div id="collapse{{ $item->id }}" class="accordion-collapse collapse"
                                             aria-labelledby="headingTwo" data-bs-parent="#accor{{ $item->id }}">
                                             <div class="accordion-body">
@@ -118,20 +119,28 @@
                                                         <div class="col-md-2">
                                                             @if (Auth::check())
                                                                 @if ($check == true)
-                                                                    <a href="#vimeo{{ $class->id }}"
-                                                                        uk-toggle>Preview</a>
-                                                                    {{-- <a target="_blank" href="{{route('user.player',[Crypt::encrypt($class->id)])}}" >Preview</a> --}}
-                                                                    <div id="vimeo{{ $class->id }}" class="uk-flex-top"
-                                                                        uk-modal>
-                                                                        <div
-                                                                            class="uk-modal-dialog uk-width-auto uk-margin-auto-vertical">
-                                                                            <button class="uk-modal-close-outside"
-                                                                                type="button" uk-close></button>
-                                                                            <iframe src="{{ $class->link }}"
-                                                                                width="1280" height="720" uk-video
-                                                                                uk-responsive></iframe>
+                                                                    @php
+                                                                        $ans = \App\Models\Answer::where('chapter_id', $item->id)
+                                                                            ->where('user_id', Auth::user()->id)
+                                                                            ->first();
+                                                                    @endphp
+                                                                    @if ($ans)
+                                                                        <a href="#vimeo{{ $class->id }}"
+                                                                            uk-toggle>Preview</a>
+                                                                        <div id="vimeo{{ $class->id }}"
+                                                                            class="uk-flex-top" uk-modal>
+                                                                            <div
+                                                                                class="uk-modal-dialog uk-width-auto uk-margin-auto-vertical">
+                                                                                <button class="uk-modal-close-outside"
+                                                                                    type="button" uk-close></button>
+                                                                                <iframe src="{{ $class->link }}"
+                                                                                    width="1280" height="720" uk-video
+                                                                                    uk-responsive></iframe>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                                                    @else
+                                                                        <i class="fa-solid fa-lock"></i>
+                                                                    @endif
                                                                 @else
                                                                     <i class="fa-solid fa-lock"></i>
                                                                 @endif
@@ -144,6 +153,32 @@
                                                         </div>
                                                     </div>
                                                 @endforeach
+                                                @if (Auth::check())
+                                                    @if ($check == true)
+                                                        @foreach ($item->quiz as $q)
+                                                            <div class="row border-bottom py-2 bg-light">
+                                                                <div class="col-md-1">
+                                                                    <i class="fa-solid fa-circle-question"></i>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <a
+                                                                        href="{{ route('user.quiz', $q->id) }}">{{ $q->quiz }}</a>
+                                                                </div>
+
+                                                                <div class="col-md-2">
+                                                                    Ques : {{ count($q->ques) }}
+                                                                </div>
+                                                                @php
+                                                                    $mark = count($q->ques) * 5;
+                                                                    $pass = ($mark * 70) / 100;
+                                                                @endphp
+                                                                <div class="col-md-2 text-end">
+                                                                    Pass : {{ $pass }}
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -395,7 +430,8 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <span>Username <span class="text-danger">*</span></span>
-                                        <input type="text" name="email" value="{{ old('email') }}" placeholder="Enter your email"
+                                        <input type="text" name="email" value="{{ old('email') }}"
+                                            placeholder="Enter your email"
                                             class="form-control @error('email') is-invalid @enderror form-control-lg mt-2 rounded-0">
                                         @error('email')
                                             <span class="message text-danger">{{ $message }}</span>
@@ -426,8 +462,6 @@
         </div>
 
 
-
-
     @section('script')
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.3/dist/js/uikit.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.3/dist/js/uikit-icons.min.js"></script>
@@ -449,7 +483,10 @@
                         feedbackFunction();
                         $(this)[0].reset();
                         button.html('SUBMIT')
-                        $.notify("Thanks to your comments",{ position:"top right",className: "success"});
+                        $.notify("Thanks to your comments", {
+                            position: "top right",
+                            className: "success"
+                        });
                     },
                     error: (error) => {
                         alert('Please check the all input field');
