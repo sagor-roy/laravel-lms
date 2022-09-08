@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('chapter_id');
             $table->string('title');
             $table->text('detail');
-            $table->string('link');
+            $table->string('link')->nullable();
             $table->string('duration');
             $table->enum('status',['1','0']);
             $table->timestamps();

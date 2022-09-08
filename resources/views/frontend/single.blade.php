@@ -20,6 +20,17 @@
             </div>
         </section>
 
+        {{-- @php
+            $answer = \App\Models\Answer::where('chapter_id', $class->chapter_id)
+                ->where('user_id', Auth::user()->id)
+                ->first();
+        @endphp
+        @if ($answer)
+            @php
+                $count++;
+            @endphp
+        @endif --}}
+
         <section class="mt-5">
             <div class="container">
                 <div class="row">
@@ -75,6 +86,7 @@
                             $time = \App\Models\Classes::where('course_id', $data->id)->sum('duration');
                             $hours = floor($time / 60);
                             $minutes = $time % 60;
+                            $count = 0;
                         @endphp
                         <div class="course-content mt-5">
                             <div class="title mb-2">
@@ -83,7 +95,7 @@
                                     {{ \App\Models\Classes::where('course_id', $data->id)->count() }}
                                     lectures • {{ $hours }}h {{ $minutes }}m</p>
                             </div>
-                            @foreach ($chptr as $item)
+                            @foreach ($chptr as $key => $item)
                                 <div class="accordion" id="accor{{ $item->id }}">
                                     <div class="accordion-item my-2 shadow">
                                         <h2 class="accordion-header" id="headingTwo">
@@ -103,28 +115,42 @@
                                             </button>
                                         </h2>
 
+                                        {{-- <i class="fa-solid fa-lock"></i> --}}
+
                                         <div id="collapse{{ $item->id }}" class="accordion-collapse collapse"
                                             aria-labelledby="headingTwo" data-bs-parent="#accor{{ $item->id }}">
                                             <div class="accordion-body">
-                                                @foreach ($item->chapters as $class)
-                                                    <div class="row border-bottom py-2">
-                                                        <div class="col-md-1">
-                                                            <i class="fa-solid fa-circle-play"></i>
-                                                        </div>
-                                                        <div class="col-md-7">
-                                                            {{ $class->title }}
-                                                            <i class="fa-solid fa-caret-down"></i>
-                                                        </div>
+                                                @if (Auth::check())
+                                                    @if ($check)
+                                                        @if ($key === $count)
+                                                            @php
+                                                                $answer = \App\Models\Answer::where('chapter_id', $item->id)
+                                                                    ->where('user_id', Auth::user()->id)
+                                                                    ->first();
+                                                                $pass = 0;
+                                                                foreach ($item->quiz as $q) {
+                                                                    $mark = count($q->ques) * 5;
+                                                                    $pass = ($mark * 70) / 100;
+                                                                }
+                                                                if ($answer) {
+                                                                    $result = \App\Models\Result::where('ans_id', $answer->id)->first()->total;
+                                                                    if ($result >= $pass) {
+                                                                        $count++;
+                                                                    }
+                                                                }
+                                                            @endphp
 
-                                                        <div class="col-md-2">
-                                                            @if (Auth::check())
-                                                                @if ($check == true)
-                                                                    @php
-                                                                        $ans = \App\Models\Answer::where('chapter_id', $item->id)
-                                                                            ->where('user_id', Auth::user()->id)
-                                                                            ->first();
-                                                                    @endphp
-                                                                    @if ($ans)
+                                                            @foreach ($item->chapters as $class)
+                                                                <div class="row border-bottom py-2">
+                                                                    <div class="col-md-1">
+                                                                        <i class="fa-solid fa-circle-play"></i>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        {{ $class->title }}
+                                                                        <i class="fa-solid fa-caret-down"></i>
+                                                                    </div>
+
+                                                                    <div class="col-md-2">
                                                                         <a href="#vimeo{{ $class->id }}"
                                                                             uk-toggle>Preview</a>
                                                                         <div id="vimeo{{ $class->id }}"
@@ -138,46 +164,42 @@
                                                                                     uk-responsive></iframe>
                                                                             </div>
                                                                         </div>
-                                                                    @else
-                                                                        <i class="fa-solid fa-lock"></i>
-                                                                    @endif
-                                                                @else
-                                                                    <i class="fa-solid fa-lock"></i>
-                                                                @endif
-                                                            @else
-                                                                <i class="fa-solid fa-lock"></i>
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-2 text-end">
-                                                            {{ $class->duration }} min
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                                @if (Auth::check())
-                                                    @if ($check == true)
-                                                        @foreach ($item->quiz as $q)
-                                                            <div class="row border-bottom py-2 bg-light">
-                                                                <div class="col-md-1">
-                                                                    <i class="fa-solid fa-circle-question"></i>
+                                                                    </div>
+                                                                    <div class="col-md-2 text-end">
+                                                                        {{ $class->duration }} min
+                                                                    </div>
                                                                 </div>
-                                                                <div class="col-md-7">
-                                                                    <a
-                                                                        href="{{ route('user.quiz', $q->id) }}">{{ $q->quiz }}</a>
-                                                                </div>
+                                                            @endforeach
+                                                            @foreach ($item->quiz as $q)
+                                                                <div class="row border-bottom py-2 bg-light">
+                                                                    <div class="col-md-1">
+                                                                        <i class="fa-solid fa-circle-question"></i>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <a
+                                                                            href="{{ route('user.quiz', $q->id) }}">{{ $q->quiz }}</a>
+                                                                    </div>
 
-                                                                <div class="col-md-2">
-                                                                    Ques : {{ count($q->ques) }}
+                                                                    <div class="col-md-2">
+                                                                        Ques : {{ count($q->ques) }}
+                                                                    </div>
+                                                                    @php
+                                                                        $mark = count($q->ques) * 5;
+                                                                        $pass = ($mark * 70) / 100;
+                                                                    @endphp
+                                                                    <div class="col-md-2 text-end">
+                                                                        Pass : {{ $pass }}
+                                                                    </div>
                                                                 </div>
-                                                                @php
-                                                                    $mark = count($q->ques) * 5;
-                                                                    $pass = ($mark * 70) / 100;
-                                                                @endphp
-                                                                <div class="col-md-2 text-end">
-                                                                    Pass : {{ $pass }}
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
+                                                            @endforeach
+                                                        @else
+                                                            @include('frontend.check')
+                                                        @endif
+                                                    @else
+                                                        @include('frontend.check')
                                                     @endif
+                                                @else
+                                                    @include('frontend.check')
                                                 @endif
                                             </div>
                                         </div>

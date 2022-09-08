@@ -2,8 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Categories;
+use App\Models\Chapter;
+use App\Models\Classes;
+use App\Models\Course;
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,16 +21,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(1)->create();
-
-        // $this->call(RolePermissionSeeder::class);
-
-        // Quiz::factory(5)->create();
-        Question::factory(50)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        User::factory(1)->create();
+        Categories::factory(5)->create();
+        Course::factory(8)->create();
+        Chapter::factory(70)->create();
+        Classes::factory(200)->create();
+        Quiz::factory(100)->create();
+        Question::factory(200)->create();
+        $this->call(RolePermissionSeeder::class);
     }
 }

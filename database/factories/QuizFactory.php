@@ -17,8 +17,8 @@ class QuizFactory extends Factory
     public function definition()
     {
         return [
-            'course_id' => 3,
-            'chapter_id' => 5,
+            'course_id' => rand(1,8),
+            'chapter_id' => rand(1,70),
             'quiz' => $this->faker->realText(30)
         ];
     }

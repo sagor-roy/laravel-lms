@@ -93,7 +93,6 @@ class HomeController extends Controller
         $chptr = Chapter::where('course_id', $id)->with('chapters', 'quiz.ques')->get();
 
         $comments = Course::where('id', $id)->with('comment.user', 'comment.replies', 'comment.replies.user')->get();
-        // dd($comments->toArray());
         // return $chptr;
         return view('frontend.single', compact('data', 'chptr', 'check', 'recent', 'comments'));
     }
